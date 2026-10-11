@@ -1,0 +1,13 @@
+# Maven build output
+/target/
+
+# Compiled Java classes
+*.class
+
+# IDE/editor metadata
+/.idea/
+/.vscode/
+*.iml
+
+# Eclipse metadata (optional, if used)
+/.settings/
