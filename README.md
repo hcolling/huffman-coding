@@ -1,53 +1,79 @@
-# Huffman Coding in Java
 
-A didactic Huffman coding project using Java 17 and Maven. Input/output (`Main`) is separated from the algorithm (`Huffman`).
+# Huffman Coding
+
+Java implementation of the Huffman coding algorithm using a greedy strategy.
 
 ## Requirements
-- JDK 17 or newer
-- Maven 3.8 or newer
 
-## Run
-From the project root:
+- Java 17 or later
+- Maven
+
+## Build
 
 ```bash
 mvn test
 mvn package
-java -cp target/classes huffman.Main tests/test1_small true
-java -cp target/classes huffman.Main tests/test2_medium false
-java -cp target/classes huffman.Main tests/test3_large false
 ```
 
-The second argument controls merge tracing (`true`/`false`). For the large input, `false` is recommended because printing every merge does not help performance measurement.
+## Run
 
-## Test instances
-- **Test 1:** `BANANA`, a small input that is easy to trace manually.
-- **Test 2:** ASCII text repeated 30 times, for an intermediate-size input.
-- **Test 3:** 1,000,000 ASCII characters generated with a fixed seed for reproducibility.
+The program accepts up to three command-line arguments:
 
-The test files are fixed and reproducible. The large input is generated once and included in the project.
+```bash
+java -cp target/classes huffman.Main <input-file> <show-trace> <show-encoded-bits>
+```
 
-## Reported metrics
+### Arguments
+
+1. `input-file`: path to the input file. Defaults to `tests/test1_small`.
+2. `show-trace`: `true` to display the complete sequence of greedy merge decisions; `false` to hide it. Defaults to `true`.
+3. `show-encoded-bits`: `true` to print the complete encoded bit sequence; `false` to omit it. Defaults to `false`.
+
+The generated codes and statistics are displayed regardless of whether the trace or encoded sequence is enabled.
+
+### Examples
+
+Display the complete trace and encoded sequence:
+
+```bash
+java -cp target/classes huffman.Main tests/test1_small true true
+```
+
+Display the complete trace but omit the encoded sequence:
+
+```bash
+java -cp target/classes huffman.Main tests/test1_small true false
+```
+
+Hide the trace and omit the encoded sequence:
+
+```bash
+java -cp target/classes huffman.Main tests/test1_small false false
+```
+
+Run the large test without printing the trace or the potentially very long encoded sequence:
+
+```bash
+java -cp target/classes huffman.Main tests/test3_large false false
+```
+
+### Output
+
 The program displays:
-- symbol frequencies;
-- each merge decision when tracing is enabled;
-- codes per symbol and the encoded bit sequence;
-- encoded bit count and comparison against an 8-bit-per-symbol baseline;
-- time spent building the tree and encoding the sequence.
 
-The comparison assumes 8 bits per input symbol, which is appropriate for the ASCII test files. It does not include the cost of storing the code table, headers, or metadata, so it is not the final size of a complete compressed file.
+- Input file and number of input symbols.
+- Symbol frequencies and merge decisions when tracing is enabled.
+- Generated Huffman codes and their frequencies.
+- The encoded bit sequence only when explicitly enabled.
+- Number of distinct symbols and total encoded bits.
+- Estimated original size, encoded-to-original size ratio, and execution timings.
 
-Timings use `System.nanoTime()` and should be recorded on the machine used for the experiment. They vary with hardware, JVM warm-up, and system load; avoid inventing results or comparing runs without controlling these conditions.
+## Tests
 
-## Implementation decisions
-- A priority queue selects the two lowest-frequency nodes.
-- Ties are resolved deterministically using the smallest symbol in each node.
-- The tree assigns `0` to the left branch and `1` to the right branch.
-- For an input with only one distinct symbol, its code is `0`, avoiding an empty code.
-- Input is read as UTF-8, but the provided instances are ASCII so the 8-bit baseline is consistent.
+Run the automated tests with:
 
-## Expected analysis
-- In the small test, observe how frequencies determine the tree and how more frequent symbols tend to receive shorter codes.
-- In the medium test, examine relative bit reduction and how costs change as input grows.
-- In the large test, disable tracing and compare timings. Tree construction depends primarily on the number of distinct symbols (`k`), while encoding processes all `n` input symbols.
+```bash
+mvn test
+```
 
-Huffman coding is not guaranteed to produce a smaller representation for every input: the comparison above excludes the tree/code table required for decoding.
+The test suite checks prefix-free codes, encoded length, empty and single-symbol inputs, and frequency counts.
