@@ -1,3 +1,11 @@
+/*******************************************************************************
+ * Developed by: Gabriel Pires de Farias & Henrique Colling
+ * Semester: 2026/2
+ *
+ * Discipline: Analysis and Project of Algorithms
+ * Course: Computer Science
+ * Institution: Universidade do Vale do Rio dos Sinos (UNISINOS)
+ ******************************************************************************/
 
 package huffman;
 
