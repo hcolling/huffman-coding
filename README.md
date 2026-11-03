@@ -5,7 +5,7 @@ Java implementation of the Huffman coding algorithm using a greedy strategy.
 
 ## Requirements
 
-- Java 17 or later
+- Java 25 LTS or later
 - Maven
 
 ## Build
